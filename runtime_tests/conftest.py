@@ -1,5 +1,6 @@
 """These tests load real HA; only the physical Vallox reader is simulated."""
 from copy import deepcopy
+from pathlib import Path
 from unittest.mock import AsyncMock
 
 import pytest
@@ -48,8 +49,11 @@ class SimulatedReader:
 
 
 @pytest.fixture(autouse=True)
-def enable_local_code(enable_custom_integrations):
+def enable_local_code(enable_custom_integrations, monkeypatch):
     """Enable the project under test through the normal HA custom loader."""
+    import custom_components
+    project = str(Path(__file__).resolve().parents[1] / "custom_components")
+    monkeypatch.setattr(custom_components, "__path__", [project, *custom_components.__path__])
 
 
 @pytest.fixture

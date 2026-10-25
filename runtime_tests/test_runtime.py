@@ -3,6 +3,7 @@ import pytest
 
 from homeassistant.helpers import entity_registry as er
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.components.fan import FanEntityFeature
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 DOMAIN = "vallox_digit_s_legacy"
@@ -44,6 +45,7 @@ async def test_real_services_and_shared_minimum(hass, simulated_reader):
     entry = await setup(hass)
     number = entity_id(hass, entry, "number", "fan_speed_control")
     fan = entity_id(hass, entry, "fan", "fan")
+    assert hass.states.get(fan).attributes["supported_features"] == FanEntityFeature.SET_SPEED
     select = entity_id(hass, entry, "select", "temperature_select")
     await hass.services.async_call("fan", "set_percentage", {"entity_id": fan, "percentage": 100}, blocking=True)
     assert ("fan", 8) in simulated_reader.calls
