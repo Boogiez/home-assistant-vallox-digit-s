@@ -1,31 +1,35 @@
 # Vallox Digit S → Home Assistant
 
-Vanhan **Vallox / Ilmava Digit S:n** paikallinen Home Assistant -integraatio.
-Tarkoitettu vanhalle LED-paneelille. **Ensijulkaisu on beta.**
+A local Home Assistant integration for older **Vallox / Ilmava Digit S** units
+with the LED wall panel. **This is a beta release.**
 
-Saat lämpötilat, puhallinsäädön, tuloilman lämpötilapyynnön ja suodatinmuistutuksen.
-Ilmavirran ja tehon arviot saat syöttämällä oman koneesi arvot asetuksiin.
+Read temperatures, adjust fan speed and the supply-air temperature request,
+and track filter changes. Add your own airflow and power curves for estimates.
 
-## Asennus
+## Install
 
-1. Lataa tämä projekti: **Code → Download ZIP**.
-2. Kopioi `custom_components/vallox_digit_s_legacy` Home Assistantin
-   `config/custom_components/`-kansioon ja käynnistä Home Assistant uudelleen.
-3. Avaa **Asetukset → Laitteet ja palvelut → Lisää integraatio → Vallox Digit S**.
-4. Valitse RS485-yhteys. Verkkosillan osoite on esimerkiksi `socket://vallox-gateway.local:8899`.
+1. Download this project: **Code → Download ZIP**.
+2. Copy `custom_components/vallox_digit_s_legacy` into Home Assistant's
+   `config/custom_components/` folder, then restart Home Assistant.
+3. Open **Settings → Devices & services → Add integration → Vallox Digit S**.
+4. Select your RS485 connection. For a transparent TCP bridge, use an address
+   such as `socket://vallox-gateway.local:8899`.
 
-Tarvitset Home Assistant 2026.9:n tai uudemman sekä yhteensopivan RS485-sillan
-(ESPHome tai läpinäkyvä TCP-silta, 9600 baud / 8N1). Käytä väylällä vain yhtä integraatiota.
+Requires Home Assistant 2026.9 or later and a compatible RS485 bridge
+(ESPHome or transparent TCP, 9600 baud / 8N1). Use only one integration per bus.
 
-## Käyttö
+## Use
 
-- Säädä puhallusta **Ilmanvaihto**-kortista. Tuettu säätöalue on 5–8.
-- Valitse **Tuloilman lämpötilapyyntö**. Merkintä **≈** tarkoittaa asteikkoarviota.
-- Kirjaa suodattimien vaihtopäivä ja huoltoväli. Huollon erääntymisestä voi tehdä HA-ilmoituksen.
+- Adjust the **Ilmanvaihto** fan entity. Supported fan levels are 5–8.
+- Choose **Tuloilman lämpötilapyyntö** for the supply-air temperature request.
+  Values marked **≈** are approximate LED-scale temperatures.
+- Set the filter change date and service interval. Use the due sensor in a
+  Home Assistant notification automation if desired.
 
-Tämä julkaisu ei ohjaa lämmityksen käyttökytkintä tai ohituspeltiä eikä tulkitse
-vahvistamattomia vikakoodeja. Se ei korvaa ilmanvaihdon säätöä tai koneen suojauksia.
+Heater enable, bypass control and unverified device fault codes are not supported
+in this release. Airflow and power figures are estimates, not meter readings.
 
-[Tuetut ominaisuudet](docs/feature-comparison.md) · [Testaus ja rajaukset](docs/validation.md)
+[Suomenkielinen ohje](README.fi.md) · [Supported features](docs/feature-comparison.md)
+· [Tests and limitations](docs/validation.md)
 
-GPL-3.0. Protokollalähteet ja tekijät: [NOTICE](NOTICE.md).
+GPL-3.0. Credits and protocol sources: [NOTICE](NOTICE.md).
