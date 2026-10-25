@@ -1,31 +1,33 @@
-# Vallox Digit S → Home Assistant
+# Vallox Digit S
 
-Vanhan **Vallox / Ilmava Digit S:n** paikallinen Home Assistant -integraatio.
-Tarkoitettu vanhalle LED-paneelille. **Ensijulkaisu on beta.**
+Python-kirjasto ja Home Assistant -integraatio vanhalle Vallox / Ilmava Digit S
+-ilmanvaihtokoneelle, jossa on LED-seinäpaneeli. Yhteys toimii RS485-väylästä
+sarjaporttisovittimen tai läpinäkyvän TCP-sillan kautta: 9600 baud, 8N1.
 
-Saat lämpötilat, puhallinsäädön, tuloilman lämpötilapyynnön ja suodatinmuistutuksen.
-Ilmavirran ja tehon arviot saat syöttämällä oman koneesi arvot asetuksiin.
+**Beta.** Testattu vanhalla Digit S -koneella. Uudemman Vallox MV:n WebSocket API
+käyttää eri protokollaa.
 
-## Asennus
+## Home Assistant
 
-1. Lataa tämä projekti: **Code → Download ZIP**.
-2. Kopioi `custom_components/vallox_digit_s_legacy` Home Assistantin
-   `config/custom_components/`-kansioon ja käynnistä Home Assistant uudelleen.
-3. Avaa **Asetukset → Laitteet ja palvelut → Lisää integraatio → Vallox Digit S**.
-4. Valitse RS485-yhteys. Verkkosillan osoite on esimerkiksi `socket://vallox-gateway.local:8899`.
+1. Kopioi `custom_components/vallox_digit_s_legacy` Home Assistantin asetuskansion
+   `custom_components`-hakemistoon ja käynnistä Home Assistant uudelleen.
+2. Lisää **Vallox Digit S** kohdasta **Asetukset → Laitteet ja palvelut**.
+3. Anna yhteysosoite, esimerkiksi `socket://vallox-gateway.local:8899`.
 
-Tarvitset Home Assistant 2026.9:n tai uudemman sekä yhteensopivan RS485-sillan
-(ESPHome tai läpinäkyvä TCP-silta, 9600 baud / 8N1). Käytä väylällä vain yhtä integraatiota.
+Vaatii Home Assistant 2026.9:n tai uudemman. Käytä yhdellä väylällä yhtä asiakasta.
 
-## Käyttö
+Integraatio lukee neljä lämpötilaa, puhallintason ja lämpötilapyynnön.
+Puhallinohjaus tukee tasoja 5–8. Lämpötilapyyntö käyttää koneen kahdeksaa porrasta;
+≈-merkillä näkyvät Celsius-arvot ovat arvioita. Lämmityksen käyttökytkintä ja
+ohituspeltiä ei ole varmistettu tälle ohjaimelle.
 
-- Säädä puhallusta **Ilmanvaihto**-kortista. Tuettu säätöalue on 5–8.
-- Valitse **Tuloilman lämpötilapyyntö**. Merkintä **≈** tarkoittaa asteikkoarviota.
-- Kirjaa suodattimien vaihtopäivä ja huoltoväli. Huollon erääntymisestä voi tehdä HA-ilmoituksen.
+Suodattimen vaihtopäivä ja vaihtoväli tallentuvat Home Assistantiin. Ilmamäärä- ja
+tehoarviot perustuvat asetuksiin antamiisi mittauksiin.
 
-Tämä julkaisu ei ohjaa lämmityksen käyttökytkintä tai ohituspeltiä eikä tulkitse
-vahvistamattomia vikakoodeja. Se ei korvaa ilmanvaihdon säätöä tai koneen suojauksia.
+## Python
 
-[Tuetut ominaisuudet](docs/feature-comparison.md) · [Testaus ja rajaukset](docs/validation.md)
+Kirjastoa voi käyttää myös ilman Home Assistantia. Asennus, käyttöesimerkit ja
+async-rajapinta ovat [englanninkielisessä ohjeessa](README.md) ja [API-ohjeessa](docs/api.md).
 
-GPL-3.0. Protokollalähteet ja tekijät: [NOTICE](NOTICE.md).
+[Alkuperäinen Digit SE -käyttöohje (PDF)](docs/manuals/D_se_kho.pdf) ·
+[Tuetut ominaisuudet](docs/feature-comparison.md) · [Lisenssi ja lähteet](NOTICE.md)

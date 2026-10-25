@@ -1,35 +1,58 @@
-# Vallox Digit S → Home Assistant
+# Vallox Digit S
 
-A local Home Assistant integration for older **Vallox / Ilmava Digit S** units
-with the LED wall panel. **This is a beta release.**
+Python client and Home Assistant integration for older Vallox / Ilmava Digit S
+ventilation units with an LED wall panel. Uses the RS485 bus through a serial
+adapter or transparent TCP bridge (9600 baud, 8N1).
 
-Read temperatures, adjust fan speed and the supply-air temperature request,
-and track filter changes. Add your own airflow and power curves for estimates.
+The Python package works without Home Assistant. It provides blocking and async
+clients, typed readings, fan control and supply-air temperature requests.
 
-## Install
+**Beta.** Tested on a legacy Digit S. This is a different protocol from the
+Vallox MV WebSocket API; support for other models has not been established.
 
-1. Download this project: **Code → Download ZIP**.
-2. Copy `custom_components/vallox_digit_s_legacy` into Home Assistant's
-   `config/custom_components/` folder, then restart Home Assistant.
-3. Open **Settings → Devices & services → Add integration → Vallox Digit S**.
-4. Select your RS485 connection. For a transparent TCP bridge, use an address
-   such as `socket://vallox-gateway.local:8899`.
+## Python
 
-Requires Home Assistant 2026.9 or later and a compatible RS485 bridge
-(ESPHome or transparent TCP, 9600 baud / 8N1). Use only one integration per bus.
+Requires Python 3.12 or later. Install from this repository:
 
-## Use
+```sh
+pip install "git+https://github.com/Boogiez/home-assistant-vallox-digit-s.git"
+```
 
-- Adjust the **Ilmanvaihto** fan entity. Supported fan levels are 5–8.
-- Choose **Tuloilman lämpötilapyyntö** for the supply-air temperature request.
-  Values marked **≈** are approximate LED-scale temperatures.
-- Set the filter change date and service interval. Use the due sensor in a
-  Home Assistant notification automation if desired.
+```python
+from vallox_digit_s import Client
 
-Heater enable, bypass control and unverified device fault codes are not supported
-in this release. Airflow and power figures are estimates, not meter readings.
+with Client("socket://vallox-gateway.local:8899") as unit:
+    status = unit.read()
+    print(status.supply_temperature)  # °C; None if missing or stale
+    print(status.fan_speed)           # device level
+```
 
-[Suomenkielinen ohje](README.fi.md) · [Supported features](docs/feature-comparison.md)
-· [Tests and limitations](docs/validation.md)
+For asyncio, use `AsyncClient` with `async with` and `await unit.read()`.
+The read-only CLI is `vallox-digit-s socket://vallox-gateway.local:8899`.
 
-GPL-3.0. Credits and protocol sources: [NOTICE](NOTICE.md).
+[API and examples](docs/api.md) · [Protocol and supported features](docs/feature-comparison.md)
+
+## Home Assistant
+
+Copy `custom_components/vallox_digit_s_legacy` into your configuration's
+`custom_components` directory, restart, then add **Vallox Digit S** under
+**Settings → Devices & services**. Requires Home Assistant 2026.9 or later.
+
+The integration includes fan controls, temperature readings, a filter-change
+record and optional airflow/power estimates using your own measurements.
+
+[Home Assistant setup](docs/home-assistant.md) · [Suomeksi](README.fi.md)
+
+## Scope
+
+- Four air temperatures, actual fan level and temperature-request step.
+- Confirmed fan changes at levels 5–8 and temperature-request steps 1–8.
+- Passive bus capture for investigating other registers.
+
+Heater enable, bypass and device fault codes are not verified for this controller.
+They are not exposed as working features. Use one client per physical bus.
+
+[Original Digit SE manual (PDF)](docs/manuals/D_se_kho.pdf) · [Tests](docs/validation.md)
+· [Changes](CHANGELOG.md)
+
+Code: GPL-3.0. [Credits and manual copyright](NOTICE.md).

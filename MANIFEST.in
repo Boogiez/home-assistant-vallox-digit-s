@@ -1,0 +1,9 @@
+graft custom_components/vallox_digit_s_legacy
+graft tests
+graft runtime_tests
+graft docs
+graft examples
+graft scripts
+include README.fi.md CHANGELOG.md requirements-test.txt pytest.ini hacs.json
+global-exclude *.pyc *.pyo
+prune custom_components/vallox_digit_s_legacy/vallox_digit_s.egg-info

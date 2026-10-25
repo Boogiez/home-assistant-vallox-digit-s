@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vallox-digit-s"
+version = "0.8.0b1"
+description = "Python client for legacy Vallox Digit S RS485 ventilation controllers"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "GPL-3.0-only"
+license-files = ["LICENSE", "NOTICE.md"]
+dependencies = ["serialx>=1.9.0,<2"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Topic :: Home Automation",
+]
+
+[project.urls]
+Repository = "https://github.com/Boogiez/home-assistant-vallox-digit-s"
+Issues = "https://github.com/Boogiez/home-assistant-vallox-digit-s/issues"
+
+[project.scripts]
+vallox-digit-s = "vallox_digit_s.__main__:main"
+
+# Home Assistant ships this same package; there is no second protocol copy.
+[tool.setuptools.packages.find]
+where = ["custom_components/vallox_digit_s_legacy"]
+include = ["vallox_digit_s*"]
+
+[tool.setuptools.package-data]
+vallox_digit_s = ["py.typed"]
