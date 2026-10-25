@@ -115,22 +115,25 @@ class DigitSCoordinator(DataUpdateCoordinator):
             raise SpeedControlError("Valitse puhallintaso asetetun vähimmäistason ja tason 8 väliltä.")
         if self._stopping or self.capture_pending or self._wire_lock.locked():
             raise SpeedControlError("Lukukierros tai väylätallennus on käynnissä. Yritä hetken kuluttua.")
-        async with self._wire_lock:
-            try:
+        try:
+            async with self._wire_lock:
                 await self.hass.async_add_executor_job(self.reader.set_fan_speed, level)
-            finally:
-                self._next_poll = 0.0
-                self.async_set_updated_data(self._snapshot())
+        finally:
+            self._next_poll = 0.0
+            # Publish after releasing the lock: entity availability includes
+            # this lock, so publishing inside it leaves sibling controls
+            # incorrectly unavailable until the next UI refresh.
+            self.async_set_updated_data(self._snapshot())
 
     async def async_set_heating_level(self, level):
         if self._stopping or self.capture_pending or self._wire_lock.locked():
             raise SpeedControlError("Lukukierros tai väylätallennus on käynnissä. Yritä hetken kuluttua.")
-        async with self._wire_lock:
-            try:
+        try:
+            async with self._wire_lock:
                 await self.hass.async_add_executor_job(self.reader.set_heating_level, level)
-            finally:
-                self._next_poll = 0.0
-                self.async_set_updated_data(self._snapshot())
+        finally:
+            self._next_poll = 0.0
+            self.async_set_updated_data(self._snapshot())
 
     def signal_stop(self):
         self._stopping = True

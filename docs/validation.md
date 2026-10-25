@@ -19,6 +19,8 @@ heat-transfer figures require a user-supplied profile and are estimates.
   number services and automations. The number entity now displays that minimum.
 - Clean up the reader when the initial refresh fails or setup is cancelled.
 - Pass the config entry explicitly to the Home Assistant coordinator API.
+- Publish control readbacks after releasing the transport lock, so sibling
+  controls remain available immediately after a command completes or fails.
 - Correct public documentation, project URLs, attribution and test-file encoding.
 
 ## Evidence

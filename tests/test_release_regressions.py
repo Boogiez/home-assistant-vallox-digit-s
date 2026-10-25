@@ -59,3 +59,31 @@ def test_failed_initial_refresh_closes_reader(ha_modules, monkeypatch, failure):
     with pytest.raises(failure):
         asyncio.run(module.async_setup_entry(hass, entry))
     assert stopped == [True] and not hass.data.get(PKG)
+
+
+@pytest.mark.parametrize("control", ["fan", "heating"])
+@pytest.mark.parametrize("fails", [False, True])
+def test_command_publishes_after_unlock_on_success_and_failure(ha_modules, control, fails):
+    async def run():
+        module = importlib.import_module(f"{PKG}.coordinator")
+        entry = Entry()
+        entry.options = {}
+        snapshots = []
+        def set_value(value):
+            assert obj._wire_lock.locked()
+            if fails:
+                raise RuntimeError("simulated")
+        reader = SimpleNamespace(snapshot=lambda: {}, set_fan_speed=set_value, set_heating_level=set_value)
+        obj = module.DigitSCoordinator(Hass(), entry, reader)
+        def publish(data):
+            snapshots.append(data)
+            assert not obj._wire_lock.locked()
+        obj.async_set_updated_data = publish
+        action = obj.async_set_fan_speed if control == "fan" else obj.async_set_heating_level
+        if fails:
+            with pytest.raises(RuntimeError):
+                await action(7 if control == "fan" else 5)
+        else:
+            await action(7 if control == "fan" else 5)
+        assert len(snapshots) == 1
+    asyncio.run(run())
