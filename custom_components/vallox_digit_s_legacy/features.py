@@ -10,7 +10,8 @@ import math
 
 TEMPERATURES = (None, 10, 12.5, 15, 17.5, 20, 22.5, 25, 27)
 CONFIRMED_TEMPERATURE_STEPS = (1, 5, 8)
-FAN_NAMES = {5: "Alennettu", 6: "Perus", 7: "Tehostettu", 8: "Maksimi"}
+DEFAULT_MINIMUM_FAN_LEVEL = 5
+FAN_NAMES = {1: "Taso 1", 2: "Taso 2", 3: "Taso 3", 4: "Taso 4", 5: "Alennettu", 6: "Perus", 7: "Tehostettu", 8: "Maksimi"}
 TEMPERATURE_NAMES = {
     level: ("" if level in CONFIRMED_TEMPERATURE_STEPS else "≈ ")
     + f"{TEMPERATURES[level]:g}".replace(".", ",") + " °C"
@@ -49,7 +50,7 @@ def checked_options(options):
     result = dict(options)
     for key, low, high in (("house_area", 0, 10000), ("house_volume", 0, 100000),
                           ("isolation_factor", 0, 1), ("heating_power", 0, 10000),
-                          ("minimum_fan_level", 5, 8), ("filter_interval_days", 1, 730)):
+                          ("minimum_fan_level", 1, 8), ("filter_interval_days", 1, 730)):
         if key not in result:
             continue
         value = finite(result[key])
@@ -72,8 +73,8 @@ def checked_options(options):
 
 
 def minimum_speed(options):
-    value = finite(options.get("minimum_fan_level", 5))
-    return int(value) if value is not None and value.is_integer() and 5 <= value <= 8 else 5
+    value = finite(options.get("minimum_fan_level", DEFAULT_MINIMUM_FAN_LEVEL))
+    return int(value) if value is not None and value.is_integer() and 1 <= value <= 8 else DEFAULT_MINIMUM_FAN_LEVEL
 
 
 def speed_from_percentage(value, minimum):

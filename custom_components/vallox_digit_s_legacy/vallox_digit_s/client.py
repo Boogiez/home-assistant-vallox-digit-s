@@ -8,7 +8,7 @@ from typing import Any, Self, TypeVar
 
 from .models import Status, status_from_snapshot
 from .reader import ActiveReader
-from .speed_control import SpeedControlError
+from .speed_control import MAX_SPEED, MIN_SPEED, SpeedControlError
 
 T = TypeVar("T")
 
@@ -68,9 +68,9 @@ class Client:
             ) from None
 
     def set_fan_speed(self, level: int) -> Status:
-        """Set a verified fan level (5–8), then return mainboard readback."""
-        if type(level) is not int or not 5 <= level <= 8:
-            raise ValueError("Fan level must be an integer from 5 to 8")
+        """Set a fan level (1–8), then return mainboard readback."""
+        if type(level) is not int or not MIN_SPEED <= level <= MAX_SPEED:
+            raise ValueError("Fan level must be an integer from 1 to 8")
         return self._control(self._reader.set_fan_speed, level)
 
     def set_temperature_step(self, step: int) -> Status:

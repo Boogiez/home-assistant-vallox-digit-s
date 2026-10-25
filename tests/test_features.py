@@ -97,7 +97,7 @@ def test_helper_authority_wins_over_old_internal_values():
     assert f.maintenance({"filter_date_entity": "input_text.change", "filter_interval_entity": "input_number.interval"}, date(2026, 1, 15), values.get)["filter_due"] is None
 
 
-@pytest.mark.parametrize("options", [{"house_area": float("nan")}, {"minimum_fan_level": 4}, {"minimum_fan_level": 5.5}, {"filter_interval_days": 0}, {"filter_date_entity": "switch.heat"}, {"filter_interval_entity": "number.fan"}])
+@pytest.mark.parametrize("options", [{"house_area": float("nan")}, {"minimum_fan_level": 0}, {"minimum_fan_level": 5.5}, {"filter_interval_days": 0}, {"filter_date_entity": "switch.heat"}, {"filter_interval_entity": "number.fan"}])
 def test_options_cannot_inject_unsafe_helper_targets_or_nonfinite_data(options):
     with pytest.raises(ValueError): f.checked_options(options)
 
@@ -111,7 +111,7 @@ def test_native_fan_percent_is_a_discrete_position_not_power_and_never_off():
 
 
 def test_native_fan_current_percentage_round_trips_without_changing_speed():
-    for minimum in range(5,9):
+    for minimum in range(1,9):
         for level in range(minimum,9):
             assert f.speed_from_percentage(f.percentage_from_speed(level,minimum),minimum)==level
 

@@ -17,7 +17,9 @@ käyttää eri protokollaa.
 Vaatii Home Assistant 2026.9:n tai uudemman. Käytä yhdellä väylällä yhtä asiakasta.
 
 Integraatio lukee neljä lämpötilaa, puhallintason ja lämpötilapyynnön.
-Puhallinohjaus tukee tasoja 5–8. Lämpötilapyyntö käyttää koneen kahdeksaa porrasta;
+Puhallinohjaus tukee tasoja 1–8. Aseta asennuksesi vähimmäistaso (1–8)
+integraation asetuksista. Oletus on 5, ja nykyiset asetukset säilyvät. Sama
+vähimmäistaso koskee kaikkia ohjaustapoja ja automaatioita. Lämpötilapyyntö käyttää koneen kahdeksaa porrasta;
 ≈-merkillä näkyvät Celsius-arvot ovat arvioita. Lämmityksen käyttökytkintä ja
 ohituspeltiä ei ole varmistettu tälle ohjaimelle.
 

@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Vallox Digit S",
-        "description": "Käyttää olemassa olevaa ESPHome RS485-yhteyttä. Tekee lukukyselyitä ja sallii käsin pyydetyt puhallintasot 5–8 sekä paneelin kahdeksan lämpötilaporrasta. Ei muuta lämmityksen käyttökytkintä tai suojauksia. Pidä muut saman väylän integraatiot poissa käytöstä.",
+        "description": "Käyttää olemassa olevaa ESPHome RS485-yhteyttä. Tekee lukukyselyitä ja sallii käsin pyydetyt puhallintasot 1–8 sekä paneelin kahdeksan lämpötilaporrasta. Ei muuta lämmityksen käyttökytkintä tai suojauksia. Pidä muut saman väylän integraatiot poissa käytöstä.",
         "data": {
           "connection": "RS485-yhteys"
         }
@@ -28,7 +28,7 @@
           "airflow_per_mode": "Ilmavirtakäyrä, nopeudet 1–8 (m³/h)",
           "power_per_mode": "Puhallintehokäyrä, nopeudet 1–8 (W)",
           "heating_power": "Vastuksen nimellisteho (W; ei mitattu kulutus)",
-          "minimum_fan_level": "Kaikkien ohjausten vähimmäistaso (5–8)",
+          "minimum_fan_level": "Kaikkien ohjausten vähimmäistaso (1–8)",
           "filter_date_entity": "Nykyinen vaihtopäiväapuri (input_text/input_datetime; valinnainen)",
           "filter_interval_entity": "Nykyinen huoltoväliapuri (input_number; valinnainen)"
         }

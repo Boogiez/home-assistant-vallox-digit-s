@@ -266,7 +266,7 @@ class ActiveReader:
         """One manual command pair, fresh readback, no automatic write retries.
 
         All polling, capture and controls share the same connection lock.
-        Only 0x29 can be written, and only values for levels 5–8. No start/stop,
+        Only 0x29 can be written, and only values for levels 1–8. No start/stop,
         minimum-speed register, protections, heater or persistent overrides.
         """
         validate_speed(level)
@@ -607,7 +607,7 @@ class ActiveReader:
                 "profile": "legacy_digit_s_verified_measurements_raw_settings",
                 "transport_type": self.connection.split("://", 1)[0] if "://" in self.connection else "local_serial",
                 "settings_writes_supported": self.control_enabled,
-                "allowed_setting_writes": "manual 0x29 fan 5–8 and 0xA4 temperature step 1–8; no automatic replay",
+                "allowed_setting_writes": "manual 0x29 fan 1–8 and 0xA4 temperature step 1–8; no automatic replay",
                 "transmit_policy": "fixed read requests plus validated manual fan/temperature packets; zero TX during capture",
                 "poll_registers": [f"0x{r:02X}" for r in REGISTERS],
                 "unconfirmed_registers": ["0xA9", "0xA5"],

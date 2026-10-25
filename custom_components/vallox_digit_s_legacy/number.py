@@ -1,4 +1,4 @@
-"""Manual 5–8 speed selection; displayed state is the mainboard readback."""
+"""Manual 1–8 speed selection; displayed state is the mainboard readback."""
 from homeassistant.components.number import NumberEntity, NumberMode
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -59,9 +59,9 @@ class DigitSSpeed(CoordinatorEntity, NumberEntity):
     async def async_set_native_value(self, value):
         # HA's number service supplies floats even for whole-number steps.
         if isinstance(value, bool) or not isinstance(value, (int, float)):
-            raise HomeAssistantError("Valitse kokonaisluku väliltä 5–8.")
+            raise HomeAssistantError(f"Valitse kokonaisluku väliltä {self.native_min_value}–8.")
         if value not in range(MIN_SPEED, MAX_SPEED + 1):
-            raise HomeAssistantError("Valitse kokonaisluku väliltä 5–8.")
+            raise HomeAssistantError(f"Valitse kokonaisluku väliltä {self.native_min_value}–8.")
         try:
             validate_speed(int(value))
             await self.coordinator.async_set_fan_speed(int(value))

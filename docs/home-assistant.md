@@ -26,8 +26,11 @@ or an ESPHome serial connection offered by Home Assistant. Set the RS485 side to
   automation if needed.
 
 Integration options accept airflow and fan-power curves, building dimensions
-and a fan minimum. Keep the minimum at or above the commissioned ventilation
-setting. Calculated airflow and power are estimates based on that profile.
+and a fan minimum from 1 to 8. The default is 5; updating does not lower an
+existing minimum. Set it to the commissioned ventilation minimum for the building.
+The fan, number and select entities, including automation service calls, all enforce
+this setting before passing a command to the library. Calculated airflow and power
+are estimates based on that profile.
 
 Existing date/interval helpers can be selected in the options when migrating a
 dashboard. Entity IDs and configuration-entry IDs are preserved by this update.

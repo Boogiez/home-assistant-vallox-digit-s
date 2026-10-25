@@ -49,7 +49,7 @@ def live_reader(clock, replies, **kwargs):
     return r, port
 
 
-@pytest.mark.parametrize("level", [5, 7, 8])
+@pytest.mark.parametrize("level", [1, 2, 3, 4, 5, 7, 8])
 def test_manual_command_and_real_readback(clock, replies, level):
     r, port = live_reader(clock, replies, partial=2)
     result = r.set_fan_speed(level)
@@ -68,7 +68,7 @@ def test_same_value_does_not_write(clock, replies):
     assert r.control_commands == 0
 
 
-@pytest.mark.parametrize("level", [True, False, 0, 1, 4, 9, 255, 6.0, 5.5, "6", None])
+@pytest.mark.parametrize("level", [True, False, -1, 0, 9, 255, 6.0, 5.5, "6", None])
 def test_bad_values_never_reach_wire(clock, replies, level):
     r, port = live_reader(clock, replies)
     with pytest.raises(control.SpeedControlError):

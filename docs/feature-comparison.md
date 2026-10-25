@@ -9,7 +9,7 @@ features cannot be assumed to use the same registers.
 | Supply temperature | `0x5B` | Read, legacy NTC table |
 | Extract temperature | `0x5A` | Read, legacy NTC table |
 | Exhaust temperature | `0x5C` | Read, legacy NTC table |
-| Fan level | `0x29` | Read 1–8; write 5–8 with mainboard readback |
+| Fan level | `0x29` | Read 1–8; write 1–8 with mainboard readback |
 | Supply-air temperature request | `0xA4` | Optional read; write eight LED steps with readback |
 | Unidentified settings | `0xA9`, `0xA5` | Raw diagnostics only |
 | Passive capture | — | Bounded recording, zero transmitted bytes |

@@ -108,7 +108,7 @@ def test_capture_is_passive(offline_client):
 @pytest.mark.parametrize(
     "method,value",
     [
-        ("set_fan_speed", 4),
+        ("set_fan_speed", 0),
         ("set_fan_speed", 9),
         ("set_fan_speed", True),
         ("set_fan_speed", 6.0),
@@ -135,19 +135,39 @@ def test_control_opt_in_is_boolean():
         api.Client("/dev/ttyUSB0", allow_control="false")
 
 
-def test_public_client_real_fan_command():
+@pytest.mark.parametrize("level", range(1, 9))
+def test_public_client_real_fan_command(level):
     pytest.importorskip("serialx")
     with unit() as (url, packets), api.Client(url, allow_control=True) as client:
         assert client.read().fan_speed == 6
-        assert client.set_fan_speed(7).fan_speed == 7
+        assert client.set_fan_speed(level).fan_speed == level
         writes = [p for p in packets if not p.is_query]
-        assert [(p.register, p.recipient, p.raw) for p in writes] == [
-            (0x29, 0x11, 127),
-            (0x29, 0x20, 127),
-        ]
+        expected = (
+            []
+            if level == 6
+            else [(0x29, recipient, (1 << level) - 1) for recipient in (0x11, 0x20)]
+        )
+        assert [(p.register, p.recipient, p.raw) for p in writes] == expected
         with pytest.raises(api.ControlError):
             client.set_temperature_step(5)  # shared cooldown; no temperature write
-        assert len([p for p in packets if not p.is_query]) == 2
+        assert len([p for p in packets if not p.is_query]) == len(expected)
+
+
+@pytest.mark.parametrize("level", [1, 4])
+def test_async_client_can_set_lower_levels(level):
+    pytest.importorskip("serialx")
+
+    async def run(url):
+        async with api.AsyncClient(url, allow_control=True) as client:
+            await client.read()
+            assert (await client.set_fan_speed(level)).fan_speed == level
+
+    with unit() as (url, packets):
+        asyncio.run(run(url))
+        assert [(p.recipient, p.raw) for p in packets if not p.is_query] == [
+            (0x11, (1 << level) - 1),
+            (0x20, (1 << level) - 1),
+        ]
 
 
 def test_public_client_real_temperature_command():
@@ -236,10 +256,10 @@ def test_cancelling_queued_work_preserves_active_capture():
             for _ in range(200):
                 if client.status.state == api.ConnectionState.LISTENING:
                     break
-                await asyncio.sleep(.005)
+                await asyncio.sleep(0.005)
             assert client.status.state == api.ConnectionState.LISTENING
             queued = asyncio.create_task(client.read())
-            await asyncio.sleep(.01)
+            await asyncio.sleep(0.01)
             queued.cancel()
             with pytest.raises(asyncio.CancelledError):
                 await queued

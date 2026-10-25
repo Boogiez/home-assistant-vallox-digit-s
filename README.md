@@ -38,6 +38,10 @@ Copy `custom_components/vallox_digit_s_legacy` into your configuration's
 `custom_components` directory, restart, then add **Vallox Digit S** under
 **Settings → Devices & services**. Requires Home Assistant 2026.9 or later.
 
+Set the installation minimum (1–8) in the integration options. The default
+is 5; existing settings are retained. Every Home Assistant speed control and
+automation uses the same minimum. The Python library has no building-specific minimum.
+
 The integration includes fan controls, temperature readings, a filter-change
 record and optional airflow/power estimates using your own measurements.
 
@@ -46,7 +50,7 @@ record and optional airflow/power estimates using your own measurements.
 ## Scope
 
 - Four air temperatures, actual fan level and temperature-request step.
-- Confirmed fan changes at levels 5–8 and temperature-request steps 1–8.
+- Fan changes at levels 1–8 with mainboard readback and temperature-request steps 1–8.
 - Passive bus capture for investigating other registers.
 
 Heater enable, bypass and device fault codes are not verified for this controller.

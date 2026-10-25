@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Vallox Digit S",
-        "description": "Select the existing ESPHome RS485 connection. Polls measurements and allows manual fan levels 5–8 and eight LED-panel temperature steps. Does not change heater-enable or protection settings. Keep other integrations on the same bus disabled.",
+        "description": "Select the existing ESPHome RS485 connection. Polls measurements and allows manual fan levels 1–8 and eight LED-panel temperature steps. Does not change heater-enable or protection settings. Keep other integrations on the same bus disabled.",
         "data": {
           "connection": "RS485 connection"
         }
@@ -28,7 +28,7 @@
           "airflow_per_mode": "Airflow curve, speeds 1–8 (m³/h)",
           "power_per_mode": "Fan electrical power curve, speeds 1–8 (W)",
           "heating_power": "Heater rated power (W; not measured consumption)",
-          "minimum_fan_level": "Minimum level for every speed control (5–8)",
+          "minimum_fan_level": "Minimum level for every speed control (1–8)",
           "filter_date_entity": "Existing change-date helper (input_text/input_datetime; optional)",
           "filter_interval_entity": "Existing interval helper (input_number; optional)"
         }

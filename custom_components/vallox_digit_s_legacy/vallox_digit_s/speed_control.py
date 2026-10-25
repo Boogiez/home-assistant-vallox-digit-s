@@ -1,10 +1,10 @@
 """Narrow manual speed command for this hardware profile, never settings scans.
 
 Reference: pvainio/vallox-rs485 SetSpeed, tested on the old LED generation.
-Writes are limited to the verified 5–8 profile; lower levels can still be read.
+All eight device levels are supported. Installation limits belong to the caller.
 Do not infer limits from A9/A5, and never write them or register 06.
 """
-MIN_SPEED = 5
+MIN_SPEED = 1
 MAX_SPEED = 8
 COOLDOWN_SECONDS = 3.0
 SPEED_REGISTER = 0x29
@@ -17,7 +17,7 @@ class SpeedControlError(Exception):
 
 def validate_speed(level):
     if type(level) is not int or not MIN_SPEED <= level <= MAX_SPEED:
-        raise SpeedControlError("Valitse kokonaisluku väliltä 5–8.")
+        raise SpeedControlError("Valitse kokonaisluku väliltä 1–8.")
 
 
 def speed_packet(level, recipient):

@@ -29,7 +29,7 @@ interval matches the Home Assistant integration.
 |---|---|
 | `state` | `ready`, `partial`, `unavailable`, `listening` or `closed` |
 | `outdoor_temperature`, `supply_temperature`, `extract_temperature`, `exhaust_temperature` | °C, or `None` |
-| `fan_speed` | Device level 1–8, or `None`; writing is limited to 5–8 |
+| `fan_speed` | Device level 1–8, or `None`; all eight levels can be written |
 | `temperature_step` | Supply-air request step 1–8, or `None` |
 | `samples` | Immutable readings with raw byte, timestamp and age |
 | `errors` | `(register_or_transport, error_code)` tuples from the last poll |
@@ -54,7 +54,7 @@ with Client("socket://vallox-gateway.local:8899", allow_control=True) as unit:
         print(error)
 ```
 
-`set_fan_speed(level)` accepts integers 5–8. `set_temperature_step(step)` accepts
+`set_fan_speed(level)` accepts integers 1–8. `set_temperature_step(step)` accepts
 integers 1–8. Async clients expose the same methods with `await`.
 Commands require `allow_control=True`, a fresh cached reading, a fresh mainboard
 query and a successful readback. Consecutive commands share a three-second
@@ -63,7 +63,8 @@ cooldown. There are no automatic write retries or startup setting changes.
 Invalid values raise `ValueError`. Refused or unconfirmed commands raise
 `ControlError`; a command may already have reached the unit, so read its state
 before retrying. The library does not enforce a building-specific ventilation
-minimum; callers must apply any higher installation limit themselves.
+minimum; callers must apply their installation limit themselves. The Home
+Assistant integration provides a configurable minimum (1–8) for all its controls.
 
 The temperature setting is an eight-step LED scale, not a continuous calibrated
 Celsius setpoint. Confirmed scale anchors are step 1 = 10 °C, 5 = 20 °C and

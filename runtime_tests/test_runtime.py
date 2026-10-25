@@ -89,3 +89,37 @@ async def test_config_flow_rejects_unsupported_connection(hass):
     assert result["type"] == "form"
     result = await hass.config_entries.flow.async_configure(result["flow_id"], {"connection": "http://example.invalid"})
     assert result["type"] == "form" and result["errors"]["connection"] == "invalid_connection"
+
+
+@pytest.mark.parametrize("minimum", [1, 4, 8])
+async def test_configurable_minimum_through_all_real_services(hass, simulated_reader, minimum):
+    entry = await setup(hass)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(result["flow_id"],
+        user_input={"minimum_fan_level": minimum})
+    assert result["type"] == "create_entry"
+    await hass.async_block_till_done()
+    number = entity_id(hass, entry, "number", "fan_speed_control")
+    fan = entity_id(hass, entry, "fan", "fan")
+    select = entity_id(hass, entry, "select", "fan_mode_select")
+    assert hass.states.get(number).attributes["min"] == minimum
+    options = hass.states.get(select).attributes["options"]
+    assert len(options) == 9 - minimum
+    for domain, service, data in (
+        ("fan", "set_percentage", {"entity_id": fan, "percentage": 1}),
+        ("number", "set_value", {"entity_id": number, "value": minimum}),
+        ("select", "select_option", {"entity_id": select, "option": options[0]}),
+    ):
+        await hass.services.async_call(domain, service, data, blocking=True)
+        assert simulated_reader.calls[-1] == ("fan", minimum)
+        assert hass.states.get(number).state == str(minimum)
+    before = list(simulated_reader.calls)
+    for domain, service, data in (
+        ("fan", "set_percentage", {"entity_id": fan, "percentage": 0}),
+        ("number", "set_value", {"entity_id": number, "value": minimum - 1}),
+        ("select", "select_option", {"entity_id": select, "option": "below minimum"}),
+    ):
+        with pytest.raises(HomeAssistantError):
+            await hass.services.async_call(domain, service, data, blocking=True)
+    assert simulated_reader.calls == before
+    await hass.config_entries.async_unload(entry.entry_id)

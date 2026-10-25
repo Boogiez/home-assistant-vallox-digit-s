@@ -33,7 +33,7 @@ def test_profile_form_accepts_upstream_curves_and_retains_local_date(flow_module
     assert saved['data']['minimum_fan_level']==6
 
 
-@pytest.mark.parametrize('data',[{'airflow_per_mode':'1,2,3'},{'filter_date_entity':'switch.heater'},{'filter_interval_entity':'number.fan'},{'house_volume':float('nan')},{'minimum_fan_level':4}])
+@pytest.mark.parametrize('data',[{'airflow_per_mode':'1,2,3'},{'filter_date_entity':'switch.heater'},{'filter_interval_entity':'number.fan'},{'house_volume':float('nan')},{'minimum_fan_level':0}])
 def test_bad_profile_stays_in_form(flow_module,data):
     result=asyncio.run(flow_module.DigitSOptionsFlow().async_step_init(data))
     assert result['type']=='form' and result['errors']['base']=='invalid_profile'

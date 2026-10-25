@@ -1,3 +1,3 @@
 """Shared protocol defaults."""
-VERSION = "0.8.0b1"
+VERSION = "0.8.0b2"
 STALE_AFTER = 180

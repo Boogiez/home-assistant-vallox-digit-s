@@ -4,6 +4,11 @@ The test suite covers packet framing, NTC conversion, invalid values, partial
 traffic, echoes, stale readings, timeouts, write whitelists, cooldowns, cancellation
 and passive capture. A local TCP simulator exercises the real serialx transport.
 
+Fan levels 1–8 are covered by packet, simulated-mainboard and real TCP-transport
+tests. Home Assistant tests exercise configurable minimums at the shared command
+boundary and through fan, number and select services. Lower levels have not been
+physically tested on a new unit as part of this update.
+
 The standalone-client tests cover blocking and async use, status expiry,
 read-only operation, command readback and cancellation. Packaging checks install
 the wheel and import it in a separate process without Home Assistant.

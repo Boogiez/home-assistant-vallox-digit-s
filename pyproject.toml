@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vallox-digit-s"
-version = "0.8.0b1"
+version = "0.8.0b2"
 description = "Python client for legacy Vallox Digit S RS485 ventilation controllers"
 readme = "README.md"
 requires-python = ">=3.12"

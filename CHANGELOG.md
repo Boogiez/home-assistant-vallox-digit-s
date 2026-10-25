@@ -1,5 +1,12 @@
 # Changes
 
+## 0.8.0b2
+
+- Support fan levels 1–8 in the Python library.
+- Allow a Home Assistant minimum from 1 to 8, shared by all speed controls.
+- Retain existing minimum settings and the default of 5.
+- Add selectable labels for levels 1–4 and reject fractional minimum settings.
+
 ## 0.8.0b1
 
 - Extract the RS485 implementation into an installable `vallox-digit-s` package.

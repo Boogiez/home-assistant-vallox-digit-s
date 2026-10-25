@@ -4,7 +4,8 @@ from homeassistant import config_entries
 from homeassistant.helpers.selector import SerialPortSelector
 from homeassistant.core import callback
 from .const import DOMAIN, CONF_CONNECTION
-from .features import checked_options
+from .features import DEFAULT_MINIMUM_FAN_LEVEL, checked_options
+
 
 class DigitSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
@@ -51,7 +52,7 @@ class DigitSOptionsFlow(config_entries.OptionsFlow):
             vol.Optional("airflow_per_mode", default=current.get("airflow_per_mode", "")): str,
             vol.Optional("power_per_mode", default=current.get("power_per_mode", "")): str,
             vol.Optional("heating_power", default=current.get("heating_power", 0)): vol.All(vol.Coerce(float), vol.Range(min=0, max=10000)),
-            vol.Optional("minimum_fan_level", default=current.get("minimum_fan_level", 5)): vol.All(vol.Coerce(int), vol.Range(min=5, max=8)),
+            vol.Optional("minimum_fan_level", default=current.get("minimum_fan_level", DEFAULT_MINIMUM_FAN_LEVEL)): vol.All(vol.Coerce(float), vol.Range(min=1, max=8), vol.In(range(1, 9)), vol.Coerce(int)),
             vol.Optional("filter_date_entity", default=current.get("filter_date_entity", "")): str,
             vol.Optional("filter_interval_entity", default=current.get("filter_interval_entity", "")): str,
         }

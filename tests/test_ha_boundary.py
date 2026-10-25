@@ -203,7 +203,7 @@ def test_diagnostics_entry_hook_never_exports_config(ha_modules, make_reader):
 def test_manifest_translations_and_only_bounded_number_control():
     base=ROOT/'custom_components'/PKG
     manifest=json.loads((base/'manifest.json').read_text(encoding="utf-8"))
-    assert manifest['version']=='0.8.0b1' and manifest['domain']==PKG
+    assert manifest['version']=='0.8.0b2' and manifest['domain']==PKG
     assert manifest['requirements']==['serialx>=1.9.0,<2']
     en=json.loads((base/'strings.json').read_text(encoding="utf-8"))
     fi=json.loads((base/'translations/fi.json').read_text(encoding="utf-8"))

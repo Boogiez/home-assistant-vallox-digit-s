@@ -1,4 +1,4 @@
-"""Vallox Digit S: measurements and explicitly requested fan level 5–8."""
+"""Vallox Digit S: measurements and explicitly requested fan level 1–8."""
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 from homeassistant.core import HomeAssistant, callback
